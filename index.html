@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lieferdienst Bestellung</title>
+
+<style>
+body { font-family: Arial; margin: 20px; }
+.product { border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; border-radius: 10px; }
+button { padding: 10px 15px; background: black; color: white; border: none; border-radius: 5px; cursor: pointer; }
+#cart { margin-top: 20px; padding: 15px; border: 2px solid black; border-radius: 10px; }
+</style>
+</head>
+
+<body>
+
+<h1>Online Bestellung – Lieferdienst</h1>
+
+<h2>Menü</h2>
+
+<div class="product">
+  <h3>Pizza Margherita – 8€</h3>
+  <button onclick="addToCart('Pizza Margherita', 8)">In den Warenkorb</button>
+</div>
+
+<div class="product">
+  <h3>Döner – 6€</h3>
+  <button onclick="addToCart('Döner', 6)">In den Warenkorb</button>
+</div>
+
+<div class="product">
+  <h3>Pasta – 9€</h3>
+  <button onclick="addToCart('Pasta', 9)">In den Warenkorb</button>
+</div>
+
+<h2>Warenkorb</h2>
+<div id="cart">Noch nichts im Warenkorb.</div>
+
+<h2>Bestellen</h2>
+<input id="name" placeholder="Ihr Name" style="width:100%;padding:10px;margin-bottom:10px;">
+<input id="address" placeholder="Adresse" style="width:100%;padding:10px;margin-bottom:10px;">
+<input id="phone" placeholder="Telefonnummer" style="width:100%;padding:10px;margin-bottom:10px;">
+
+<button onclick="sendOrder()">Jetzt per WhatsApp bestellen</button>
+
+<script>
+let cart = [];
+
+function addToCart(name, price) {
+  cart.push({name, price});
+  updateCart();
+}
+
+function updateCart() {
+  if (cart.length === 0) {
+    document.getElementById("cart").innerHTML = "Noch nichts im Warenkorb.";
+    return;
+  }
+
+  let html = "";
+  let total = 0;
+
+  cart.forEach(item => {
+    html += item.name + " – " + item.price + "€<br>";
+    total += item.price;
+  });
+
+  html += "<br><b>Gesamt: " + total + "€</b>";
+  document.getElementById("cart").innerHTML = html;
+}
+
+function sendOrder() {
+  const name = document.getElementById("name").value;
+  const address = document.getElementById("address").value;
+  const phone = document.getElementById("phone").value;
+
+  if (!name || !address || !phone) {
+    alert("Bitte alle Felder ausfüllen!");
+    return;
+  }
+
+  let orderText = "Neue Bestellung:%0a";
+  cart.forEach(item => orderText += item.name + " – " + item.price + "€%0a");
+  
+  orderText += "%0aName: " + name +
+               "%0aAdresse: " + address +
+               "%0aTelefon: " + phone;
+
+  let number = "0049XXXXXXXXX"; // ← HIER DEINE WHATSAPP-NUMMER EINFÜGEN
+  window.open("https://wa.me/" + number + "?text=" + orderText);
+}
+</script>
+
+</body>
+</html>
